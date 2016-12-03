@@ -5,6 +5,8 @@
         <title>admin</title>
         <link rel="stylesheet" href="lib/materialize.min.css" media="screen" title="no title">
 
+        <link rel="stylesheet" href="master.css" media="screen" title="no title">
+
         <script src="lib/jquery-3.1.1.min.js" charset="utf-8"></script>
         <script src="lib/knockout-3.4.1.js" charset="utf-8"></script>
 
@@ -21,21 +23,25 @@
                         <tr>
                             <th data-field="id">Rooms</th>
                             <th data-field="id" style="text-align: right">
-                                <a class="btn-floating waves-effect waves-light indigo"><i class="material-icons">+</i></a>
+                                <div class="input-field col s10 mgn0">
+                                    <input style="text-align: right;" type="text" placeholder="name of new room" class="mgn0" data-bind="textInput: newRoomName, valueUpdate: 'afterkeyup'">
+                                </div>
+                                <a class="btn-floating waves-effect waves-light indigo" data-bind="click: function () {admin.newRoomCreate()}"><i class="material-icons">+</i></a>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- ko foreach: rooms -->
                         <tr>
-                            <td data-bind="text: $data">room name</td>
+                            <td data-bind="text: name">room name</td>
                             <td style="text-align: right">
-                                <a class="btn-flat">delete</a>
+                                <a class="btn-flat" data-bind="click: admin.removeRoom">delete</a>
                             </td>
                         </tr>
                         <!-- /ko -->
                     </tbody>
                 </table>
+                <a class="mgnT20 waves-effect waves-light btn indigo" data-bind="click: loadAll" >refresh</a>
 
             </div>
         </div>
