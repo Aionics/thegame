@@ -11,6 +11,38 @@ var stage = new PIXI.Container();
 var circle = '';
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>
+function request(url, data, success) {
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        type: 'post',
+        async: true,
+        data: data,
+        success: function (data) { success(data); },
+        error: function () {}
+    });
+}
+
+var gamesList = {
+    openGames: ko.observableArray([]),
+    players: ko.observableArray([])
+}
+gamesList.loadGames = function () {
+    request('/api/loadall', null, function (rooms) {
+        gamesList.openGames(rooms);
+    });
+};
+
+gamesList.enterRoom = function (room) {
+    socket.send({
+		action: 'entering',
+		user: iam,
+        target: room.name
+	});
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 function guid() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -21,51 +53,20 @@ function guid() {
 }
 
 var iam = {
+    nickName: 'Aion',
 	uuid: guid().toString()
 }
-var socket = io('192.168.0.3:3001');
+var socket = io('127.0.01:3001');
 
 socket.on('connect', function() {
-	socket.send({
-		action: 'registration',
-		uuid: iam.uuid
+	socket.emit('registration', {
+		user: iam
 	});
 })
 
-socket.on('message', function(data){
-	if (ready) {
-		data = JSON.parse(data);
-		if (data.status == 'notready') {
-			$('.test').text('Ждем второго');
-		}else{
-			$('.test').text('');
-			if ( !prepare ) {
-				prepare = true;
-				window.players = data.players;
-
-				var players = window.players
-				for (uuid in players) {
-					if (uuid == iam.uuid) {
-						iam.pos = players[uuid].pos;
-					}
-					console.log(players[uuid].type);
-					var sprite = new PIXI.Sprite(
-    					PIXI.loader.resources['img/' + players[uuid].type].texture
-					);
-					players[uuid].sprite = sprite;
-					stage.addChild(sprite);
-				}
-			} else {
-				var players = window.players
-				for (uuid in players) {
-					players[uuid].sprite.position.set(data.players[uuid].pos.x, data.players[uuid].pos.y);
-				}
-				console.log(players);
-				renderer.render(stage);
-			}		
-		}
-	}
-});
+socket.on('registration-answer', function (players) {
+    gamesList.players(players);
+})
 
 document.onkeydown = function (e) {
 
@@ -105,6 +106,13 @@ $(document).ready(function() {
 		'img/circle.jpg'
 	]).load(function () {
 		ready = true;
-	})
-});
+	});
 
+    ko.applyBindings(gamesList);
+    gamesList.loadGames();
+
+    $('.modal').modal({
+        dismissible: false
+    });
+    $('#open_games').modal('open');
+});

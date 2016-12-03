@@ -3,7 +3,10 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" href="/lib/materialize.min.css" media="screen" title="no title">
+	<link rel="stylesheet" href="index.css" media="screen" title="no title">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script src="lib/jquery-3.1.1.min.js"></script>
+	<script src="lib/knockout-3.4.1.js"></script>
 	<script src="lib/materialize.min.js"></script>
 	<script src="lib/pixi.min.js"></script>
 	<script src="lib/socket.io.min.js"></script>
@@ -12,7 +15,37 @@
 	<style>* {padding: 0; margin: 0}</style>
 </head>
 <body>
-	<span class="test">
-	</span>
+<div id="open_games" class="modal indigo white-text">
+	<div class="modal-content">
+		<h4>Список открытых игр</h4>
+
+		<table class="striped">
+			<thead>
+			<tr>
+				<th>Название</th>
+				<th>Игроки</th>
+				<th></th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<!-- ko foreach: openGames -->
+			<tr>
+				<td data-bind="text: name">name</td>
+				<td>0</td>
+				<td class="right">
+					<a class="btn-floating btn-large waves-effect waves-light" data-bind="click: enterRoom"><i class="material-icons">play_arrow</i></a>
+			  	</td>
+			</tr>
+			<!-- /ko -->
+			</tbody>
+		</table>
+		<h5>Игроки вне игр:</h5>
+		<!-- ko foreach: players -->
+		<span data-bind="text: user.nickName"></span>
+		<!-- /ko -->
+	</div>
+</div>
+
 </body>
 </html>

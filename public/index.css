@@ -1,1 +1,7 @@
-<style>* {padding: 0; margin: 0}</style>
+table.striped>tbody>tr:nth-child(odd) {
+    background-color: #303f9f;
+}
+.right {
+    text-align: right;
+    margin-right: 10px;
+}

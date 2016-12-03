@@ -2,4 +2,7 @@ let rooms = [{
     name: 'first'
 }]
 
-module.exports = rooms;
+let players = []
+
+module.exports.rooms = rooms;
+module.exports.players = players;

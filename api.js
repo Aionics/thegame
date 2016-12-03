@@ -1,5 +1,5 @@
 const bodyParser = require("body-parser");
-let rooms = require('./game')
+let game = require('./game')
 
 module.exports = function (api) {
     api.set('json spaces', 40);
@@ -9,14 +9,14 @@ module.exports = function (api) {
     api.post('/api/loadall', function (req, res, next) {
         if (!req.xhr) return next();
 
-        res.json(rooms);
+        res.json(game.rooms);
     })
 
     api.post('/api/newroom', function (req, res, next) {
         if (!req.xhr) return next();
 
         let name = req.body.name;
-        rooms.push({
+        game.rooms.push({
             name: name
         })
         res.json({
@@ -29,9 +29,9 @@ module.exports = function (api) {
         if (!req.xhr) return next();
 
         let name = req.body.name;
-        rooms.forEach( (room, index) => {
+        game.rooms.forEach( (room, index) => {
             if (room.name == name) {
-                rooms.splice(index, 1);
+                game.rooms.splice(index, 1);
                 return;
             }
         } );
