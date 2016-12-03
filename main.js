@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
-const path = require("path");
+
 const http = require('http').Server(express);
 const socket = require('socket.io').listen(3001);
+
+require('./api')(app);
 
 let players = {};
 let data = {
@@ -12,6 +14,11 @@ let who = true;
 
 app.set('json spaces', 40);
 app.use('/', express.static('./public'));
+app.use('/admin', express.static('./admin'));
+
+app.get('/admin', function (req, res, next) {
+	res.sendFile('admin.html', {root: __dirname + '/admin'} )
+})
 
 app.get('/*', function (req, res, next) {
     res.sendFile("index.html", { root: __dirname + "/public"} )
@@ -33,7 +40,7 @@ socket.on('connection', function(connection) {
 			who = !who;
 			let _data = {
 				status: 'notready',
-				players: players 
+				players: players
 			}
 			console.log('data-registration: ', _data)
 			connection.json.send(JSON.stringify( _data ));
@@ -43,25 +50,25 @@ socket.on('connection', function(connection) {
 			for (uuid in players) {
 				if (data.uuid == uuid) {
 					if (data.dir == 'up') {
-						players[uuid].pos.x = players[uuid].pos.x;	
-						players[uuid].pos.y = players[uuid].pos.y - 2;	
+						players[uuid].pos.x = players[uuid].pos.x;
+						players[uuid].pos.y = players[uuid].pos.y - 2;
 					}
 					if (data.dir == 'down') {
-						players[uuid].pos.x = players[uuid].pos.x;	
-						players[uuid].pos.y = players[uuid].pos.y + 2;	
+						players[uuid].pos.x = players[uuid].pos.x;
+						players[uuid].pos.y = players[uuid].pos.y + 2;
 					}
 					if (data.dir == 'left') {
-						players[uuid].pos.x = players[uuid].pos.x - 2;	
-						players[uuid].pos.y = players[uuid].pos.y;	
+						players[uuid].pos.x = players[uuid].pos.x - 2;
+						players[uuid].pos.y = players[uuid].pos.y;
 					}
 					if (data.dir == 'right') {
-						players[uuid].pos.x = players[uuid].pos.x + 2;	
-						players[uuid].pos.y = players[uuid].pos.y;	
+						players[uuid].pos.x = players[uuid].pos.x + 2;
+						players[uuid].pos.y = players[uuid].pos.y;
 					}
-					
+
 				}
-			} 
-		} 
+			}
+		}
 	})
 
 	setInterval(function () {
@@ -71,7 +78,7 @@ socket.on('connection', function(connection) {
 			connection.json.send(JSON.stringify(data));
 		}
 	}, 1000/60);
-	
+
 
 })
 
@@ -86,4 +93,3 @@ socket.on('disconnect', function(){});
 app.listen(3000, function () {
     console.log('listening on 3000');
 });
-
