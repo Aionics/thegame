@@ -10,7 +10,8 @@
 	<script src="lib/materialize.min.js"></script>
 	<script src="lib/pixi.min.js"></script>
 	<script src="lib/socket.io.min.js"></script>
-	<script src="js/socket.js"></script>
+	<script src="js/vector.js"></script>
+	<script src="js/game.js"></script>
 	<script src="index.js"></script>
 	<style>* {padding: 0; margin: 0}</style>
 </head>
@@ -44,10 +45,6 @@
 			<!-- /ko -->
 			</tbody>
 		</table>
-		<h5>Игроки вне игр:</h5>
-		<!-- ko foreach: players -->
-		<span data-bind="text: user.nickName"></span>
-		<!-- /ko -->
 	</div>
 </div>
 

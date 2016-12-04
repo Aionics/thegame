@@ -6,21 +6,16 @@ module.exports = function (express) {
     socket.on('connection', function (connection) {
         console.log('a user connected: ');
 
-        connection.on('registration', function (player) {
-            console.log('registered: ', player);
-            // let {nickname, uuid} = player.user;
-            player.connectionId = connection.id;
-            game.players.push(player);
-            socket.sockets.emit('users_list_update', game.players);
-        });
-
-        connection.on('join', function (roomName) {
+        connection.on('join', function (data) {
             game.rooms.forEach((_room, index) => {
-                if (_room.name === roomName) {
-                    game.rooms[index].players.push(connection.id);
-                    console.log('player joined to ' + roomName);
+                if (_room.name === data.room) {
+                    game.rooms[index].players.push(data.user);
+                    connection.emit('joined', game.rooms[index]);
+                    console.log('player joined to ' + data.room);
                 }
-                return socket.sockets.emit('users_list_update', game.players);
+                return socket.sockets.emit('users_list_update', {
+                    players: game.players
+                });
             });
         });
 
