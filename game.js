@@ -1,8 +1,8 @@
 let rooms = [{
     name: 'first'
-}]
+}];
 
-let players = []
+let players = [];
 
 module.exports.rooms = rooms;
 module.exports.players = players;

@@ -1,18 +1,18 @@
 module.exports = function (express) {
-const http = require('http').Server(express);
-const socket = require('socket.io').listen(47996);
-let game = require('./game');
+    const http = require('http').Server(express);
+    const socket = require('socket.io').listen(47996);
+    let game = require('./game');
 
-    socket.on('connection', function(connection) {
-    	console.log('a user connected: ');
+    socket.on('connection', function (connection) {
+        console.log('a user connected: ');
 
-    	connection.on('registration', function (player) {
+        connection.on('registration', function (player) {
             console.log('registered: ', player);
             // let {nickname, uuid} = player.user;
             player.connectionId = connection.id;
             game.players.push(player);
             socket.sockets.emit('users_list_update', game.players);
-    	})
+        });
 
         connection.on('disconnect', function () {
             game.players.forEach((player, index) => {
@@ -22,14 +22,5 @@ let game = require('./game');
                 return console.log(game.players);
             });
         });
-    })
-
-
-    socket.on('event', function(data){
-    	console.log('resieved data: ', data);
-    	console.log(data);
     });
-
-    socket.on('event', function(data){});
-    socket.on('disconnect', function(){});
 };

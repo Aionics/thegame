@@ -1,5 +1,5 @@
-const bodyParser = require("body-parser");
-let game = require('./game')
+const bodyParser = require('body-parser');
+let game = require('./game');
 
 module.exports = function (api) {
     api.set('json spaces', 40);
@@ -10,7 +10,7 @@ module.exports = function (api) {
         if (!req.xhr) return next();
 
         res.json(game.rooms);
-    })
+    });
 
     api.post('/api/newroom', function (req, res, next) {
         if (!req.xhr) return next();
@@ -18,7 +18,7 @@ module.exports = function (api) {
         let name = req.body.name;
         game.rooms.push({
             name: name
-        })
+        });
         res.json({
             error: null,
             data: 'ok'
@@ -29,15 +29,15 @@ module.exports = function (api) {
         if (!req.xhr) return next();
 
         let name = req.body.name;
-        game.rooms.forEach( (room, index) => {
+        game.rooms.forEach((room, index) => {
             if (room.name == name) {
                 game.rooms.splice(index, 1);
                 return;
             }
-        } );
+        });
         res.json({
             error: null,
             data: 'ok'
         });
     });
-}
+};

@@ -1,0 +1,14 @@
+{
+    "esversion": 6,
+    "indent": ["error", 4, {"SwitchCase": 1}],
+    "quotmark": "single",
+    "newcap": true,
+    "nonew": true,
+    "nomen": true,
+    "onevar": false,
+    "sub": false,
+    "trailing": true,
+    "nonbsp": true,
+    "immed": false,
+    "white": true
+}

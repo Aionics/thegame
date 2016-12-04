@@ -1,7 +1,7 @@
 var renderer = PIXI.autoDetectRenderer(256, 256);
 renderer.backgroundColor = 0x061639;
-renderer.view.style.position = "absolute";
-renderer.view.style.display = "block";
+renderer.view.style.position = 'absolute';
+renderer.view.style.display = 'block';
 renderer.autoResize = true;
 renderer.resize(window.innerWidth, window.innerHeight);
 
@@ -28,7 +28,7 @@ var gamesList = {
     openGames: ko.observableArray([]),
     players: ko.observableArray([]),
     myName: ko.observable()
-}
+};
 gamesList.loadGames = function () {
     request('/api/loadall', null, function (rooms) {
         gamesList.openGames(rooms);
@@ -44,47 +44,46 @@ gamesList.loadGames = function () {
 // }
 gamesList.registration = function () {
     socket.emit('registration', {
-        user: new newPlayer
+        user: new Player()
     });
     $('#registration').modal('close');
     $('#open_games').modal('open');
-}
+};
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4();
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4();
 }
 
-var newPlayer = function () {
+var Player = function () {
     this.uuid = guid().toString();
     this.nickName = gamesList.myName();
-}
+};
 
-var socket = io('aionics.ru:47996');
+var socket = io('localhost:47996');
 
-socket.on('connect', function() {
-})
+socket.on('connect', function () {});
 
 socket.on('users_list_update', function (players) {
     console.log(players);
     gamesList.players(players);
-})
+});
 
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-	document.body.appendChild(renderer.view);
+    document.body.appendChild(renderer.view);
 
-	PIXI.loader.add([
+    PIXI.loader.add([
 		'img/square.png',
 		'img/circle.jpg'
 	]).load(function () {
-		ready = true;
-	});
+        ready = true;
+    });
 
     ko.applyBindings(gamesList);
     gamesList.loadGames();
