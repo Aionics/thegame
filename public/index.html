@@ -15,6 +15,8 @@
 	<style>* {padding: 0; margin: 0}</style>
 </head>
 <body>
+
+
 <div id="open_games" class="modal indigo white-text">
 	<div class="modal-content">
 		<h4>Список открытых игр</h4>
@@ -34,7 +36,7 @@
 				<td data-bind="text: name">name</td>
 				<td>0</td>
 				<td class="right">
-					<a class="btn-floating btn-large waves-effect waves-light" data-bind="click: enterRoom"><i class="material-icons">play_arrow</i></a>
+					<a class="btn-floating btn-large waves-effect waves-light"><i class="material-icons">play_arrow</i></a>
 			  	</td>
 			</tr>
 			<!-- /ko -->
@@ -44,6 +46,20 @@
 		<!-- ko foreach: players -->
 		<span data-bind="text: user.nickName"></span>
 		<!-- /ko -->
+	</div>
+</div>
+
+<div id="registration" class="modal indigo white-text">
+	<div class="modal-content">
+		<h4>Регистрация</h4>
+		<div class="row">
+			<div class="col s10">
+				<input type="text" placeholder="Никнейм" data-bind="textInput: myName, valueUpdate: 'afterkeyup'">
+			</div>
+			<div class="col s2">
+				<a class="btn btn-large waves-effect waves-light" data-bind="click: registration">Войти</a>
+			</div>
+		</div>
 	</div>
 </div>
 

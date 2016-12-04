@@ -26,7 +26,8 @@ function request(url, data, success) {
 
 var gamesList = {
     openGames: ko.observableArray([]),
-    players: ko.observableArray([])
+    players: ko.observableArray([]),
+    myName: ko.observable()
 }
 gamesList.loadGames = function () {
     request('/api/loadall', null, function (rooms) {
@@ -34,14 +35,20 @@ gamesList.loadGames = function () {
     });
 };
 
-gamesList.enterRoom = function (room) {
-    socket.send({
-		action: 'entering',
-		user: iam,
-        target: room.name
-	});
+// gamesList.enterRoom = function (room) {
+//     socket.send({
+// 		action: 'entering',
+// 		user: iam,
+//         target: room.name
+// 	});
+// }
+gamesList.registration = function () {
+    socket.emit('registration', {
+        user: new newPlayer
+    });
+    $('#registration').modal('close');
+    $('#open_games').modal('open');
 }
-
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 function guid() {
   function s4() {
@@ -52,50 +59,21 @@ function guid() {
   return s4() + s4() + '-' + s4();
 }
 
-var iam = {
-    nickName: 'Aion',
-	uuid: guid().toString()
+var newPlayer = function () {
+    this.uuid = guid().toString();
+    this.nickName = gamesList.myName();
 }
-var socket = io('127.0.01:3001');
+
+var socket = io('aionics.ru:47996');
 
 socket.on('connect', function() {
-	socket.emit('registration', {
-		user: iam
-	});
 })
 
-socket.on('registration-answer', function (players) {
+socket.on('users_list_update', function (players) {
+    console.log(players);
     gamesList.players(players);
 })
 
-document.onkeydown = function (e) {
-
-    e = e || window.event;
-
-    var dir = 'none';
-    if (e.keyCode == '38') {
-    	// up arrow
-    	dir = 'up';
-    }
-    else if (e.keyCode == '40') {
-        // down arrow
-        dir = 'down';
-    }
-    else if (e.keyCode == '37') {
-       // left arrow
-       dir = 'left';
-    }
-    else if (e.keyCode == '39') {
-       // right arrow
-       dir = 'right';
-    }
-        socket.send({
-        	action: 'pos-update',
-        	uuid: iam.uuid,
-        	dir: dir
-        })
-
-}
 
 $(document).ready(function() {
 
@@ -114,5 +92,5 @@ $(document).ready(function() {
     $('.modal').modal({
         dismissible: false
     });
-    $('#open_games').modal('open');
+    $('#registration').modal('open');
 });

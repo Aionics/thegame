@@ -1,19 +1,26 @@
 module.exports = function (express) {
 const http = require('http').Server(express);
-const socket = require('socket.io').listen(3001);
+const socket = require('socket.io').listen(47996);
 let game = require('./game');
 
     socket.on('connection', function(connection) {
     	console.log('a user connected: ');
 
     	connection.on('registration', function (player) {
-            console.log('recieved: ', player);
+            console.log('registered: ', player);
+            // let {nickname, uuid} = player.user;
+            player.connectionId = connection.id;
             game.players.push(player);
-            connection.emit('registration-answer', game.players);
+            socket.sockets.emit('users_list_update', game.players);
     	})
 
         connection.on('disconnect', function () {
-            console.log('disconnected');
+            game.players.forEach((player, index) => {
+                if (player.connectionId === connection.id) {
+                    game.players.splice(index, 1);
+                }
+                return console.log(game.players);
+            });
         });
     })
 
