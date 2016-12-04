@@ -14,6 +14,16 @@ module.exports = function (express) {
             socket.sockets.emit('users_list_update', game.players);
         });
 
+        connection.on('join', function (roomName) {
+            game.rooms.forEach((_room, index) => {
+                if (_room.name === roomName) {
+                    game.rooms[index].players.push(connection.id);
+                    console.log('player joined to ' + roomName);
+                }
+                return socket.sockets.emit('users_list_update', game.players);
+            });
+        });
+
         connection.on('disconnect', function () {
             game.players.forEach((player, index) => {
                 if (player.connectionId === connection.id) {

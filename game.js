@@ -1,5 +1,6 @@
 let rooms = [{
-    name: 'first'
+    name: 'first',
+    players: []
 }];
 
 let players = [];
