@@ -18,14 +18,5 @@ module.exports = function (express) {
                 });
             });
         });
-
-        connection.on('disconnect', function () {
-            game.players.forEach((player, index) => {
-                if (player.connectionId === connection.id) {
-                    game.players.splice(index, 1);
-                }
-                return console.log(game.players);
-            });
-        });
     });
 };

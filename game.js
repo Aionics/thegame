@@ -4,4 +4,3 @@ let rooms = [{
 }];
 
 module.exports.rooms = rooms;
-module.exports.players = players;

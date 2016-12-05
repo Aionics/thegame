@@ -81,6 +81,14 @@ $(document).ready(function () {
         ready = true;
     });
 
+    var bg = PIXI.Texture.fromImage('img/bg.png');
+    window.background = new PIXI.extras.TilingSprite(bg, window.innerWidth, window.innerHeight);
+    background.position.x = 0;
+    background.position.y = 0;
+    background.tilePosition.x = 0;
+    background.tilePosition.y = 0;
+    stage.addChild(background);
+
     ko.applyBindings(gamesList);
     gamesList.loadGames();
 
@@ -88,4 +96,16 @@ $(document).ready(function () {
         dismissible: false
     });
     $('#registration').modal('open');
+});
+
+$(window).resize(function () {
+    newWidth = window.innerWidth;
+    newHeight = window.innerHeight;
+
+    renderer.view.style.width = newWidth + 'px';
+    renderer.view.style.height = newHeight + 'px';
+    renderer.resize(newWidth, newHeight);
+
+    background.width = newWidth;
+    background.height = newHeight;
 });
